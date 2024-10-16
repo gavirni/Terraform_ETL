@@ -7,7 +7,7 @@ module "custom_vpc" {
 
 module "bucket" {
   source     = "./modules/storage"
-  name       = "dataproc-config"
+  name       = "harish-dataproc-config"
   project_id = var.project_id
   prefix     = var.prefix
   region     = var.region
@@ -29,6 +29,14 @@ module "iam" {
 #  bucket_name = module.bucket.bucket_name
 #  subnet_id   = module.custom_vpc.subnet_id
 #}
+
+module "CloudSqlDb" {
+  source            = "./modules/CloudSql"
+  project_id        = var.project_id
+  network_id        = module.custom_vpc.vpc_id
+  network_self_link = module.custom_vpc.vpc_self_link
+}
+
 module "cluster" {
   source      = "./modules/dataproc-cluster"
   prefix      = var.prefix
